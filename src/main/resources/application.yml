@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/clever
+    username: postgres
+    password: postgres
+  jpa:
+#    show-sql: true
+    hibernate.ddl-auto: validate
+  flyway:
+    locations: classpath:db
+    table: clever_flyway_history
+    baseline-on-migrate: true
+    baseline-version: 0
+cron:
+  start-import-notes: 0 15 */2 * * *
+
+webClient:
+  baseUrl: http://localhost:8081
+  timeout-ms: 2000

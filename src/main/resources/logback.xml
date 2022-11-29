@@ -1,0 +1,55 @@
+<configuration>
+
+    <!-- Log Settings -->
+    <property name="LOG_NAME" value="clever"/>
+    <property name="LOG_DIRECTORY" value="./efs_storage/logs"/>
+
+    <property name="CONSOLE_APP_LOG_PATTERN"
+              value="%d{yyyy-MMM-dd HH:mm:ss.SSS} %highlight(%-5level) [%thread] %magenta(%logger{15}) - %msg%n"/>
+    <property name="CONSOLE_OTHER_LOG_PATTERN"
+              value="%d{yyyy-MMM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n"/>
+    <property name="FILE_LOG_PATTERN" value="%d{yyyy-MMM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n"/>
+
+    <property name="CONSOLE_OTHER_LOG_LEVEL" value="INFO"/>
+    <property name="FILE_OTHER_LOG_LEVEL" value="INFO"/>
+
+    <!-- Configuration -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIRECTORY}/${LOG_NAME}.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover (the pattern defines the rollover time) -->
+            <fileNamePattern>${LOG_DIRECTORY}/${LOG_NAME}.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>90</maxHistory> <!-- maintain logs for this many days -->
+            <totalSizeCap>2GB</totalSizeCap> <!-- limited at a maximum of 2GB of storage -->
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${CONSOLE_OTHER_LOG_LEVEL}</level>
+        </filter>
+        <encoder>
+            <pattern>${CONSOLE_OTHER_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="STDOUT_APP" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_APP_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.springframework" level="INFO"/>
+<!--    <logger name="org.hibernate.SQL" level="DEBUG"/>-->
+
+    <root level="${CONSOLE_OTHER_LOG_LEVEL}">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>
